@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios"; b 
+import axios from "axios";
 import "./search.css"
 
 class Search extends React.Component {
