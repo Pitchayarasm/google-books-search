@@ -41,18 +41,12 @@ class Search extends React.Component {
 
   saveBook = book => {
     console.log(book.volumeInfo.authors, book.volumeInfo.title, book.volumeInfo.description, book.volumeInfo.infoLink, book.volumeInfo.imageLinks.thumbnail)
-    let imageSave = ""
-    if (book.volumeInfo.imageLinks) {
-        imageSave = book.volumeInfo.imageLinks.thumbnail
-      } else  {
-        imageSave = null;
-      }
       axios.post("/api/books" , {
         author : book.volumeInfo.authors,
         title : book.volumeInfo.title,
         description : book.volumeInfo.description,
         link : book.volumeInfo.infoLink,
-        image : {imageSave}
+        image : book.volumeInfo.imageLinks.thumbnail
       }).then( data => {
         console.log(data)
         this.setState({
