@@ -11,11 +11,20 @@ class Search extends React.Component {
   search = (title) => {
     axios.get("https://www.googleapis.com/books/v1/volumes?q="+ title)
     .then( (res) => {
-      this.setState({
-        result : res.data.items,
-        search : ""
-      })
-      console.log(this.state.result)
+      if (res) {
+        this.setState({
+          result : res.data.items,
+          search : ""
+        })
+      } else {
+        alert("Book not found!")
+      }
+    })
+  }
+
+  clearResult = () => {
+    this.setState({
+      result : []
     })
   }
 
@@ -32,12 +41,18 @@ class Search extends React.Component {
 
   saveBook = book => {
     console.log(book.volumeInfo.authors, book.volumeInfo.title, book.volumeInfo.description, book.volumeInfo.infoLink, book.volumeInfo.imageLinks.thumbnail)
+    let imageSave = ""
+    if (book.volumeInfo.imageLinks) {
+        imageSave = book.volumeInfo.imageLinks.thumbnail
+      } else  {
+        imageSave = null;
+      }
       axios.post("/api/books" , {
         author : book.volumeInfo.authors,
         title : book.volumeInfo.title,
         description : book.volumeInfo.description,
         link : book.volumeInfo.infoLink,
-        image : book.volumeInfo.imageLinks.thumbnail
+        image : {imageSave}
       }).then( data => {
         console.log(data)
         this.setState({
@@ -66,7 +81,8 @@ class Search extends React.Component {
                   placeholder = "Search by Title"
                   id = "search"
                 />
-              <button style={{float:"right"}} onClick={this.handleFormSearch} className="btn btn-dark mt-3">Search</button>
+              <button style={{float:"right"}} onClick={this.clearResult} className="btn btn-dark mt-3">Clear Result</button>
+              <button style={{float:"right", marginRight : "20px"}} onClick={this.handleFormSearch} className="btn btn-dark mt-3">Search</button>
               <br/> <br/>
             </form>
         </div>
@@ -76,16 +92,16 @@ class Search extends React.Component {
             <div className="container result" key={book.volumeInfo.infoLink} style={{visibility : book.volumeInfo.title? "visible" : "hidden"}} >
               <ul style={{listStyle: "none"}}>
                 <li >
-                  <button style={{float:"right"}} onClick={() => this.saveBook(book)} className="btn btn-dark mt-3">Save</button>
+                  <button style={{float:"right"}} onClick={() => this.saveBook(book)} disabled={!book.volumeInfo.imageLinks} className="btn btn-dark mt-3">Save</button>
                   <button style={{float:"right", marginRight:"10px"}} className="btn btn-dark mt-3"><a target ="_ blank" href={book.volumeInfo.infoLink}>View</a></button>
                 </li>
               </ul>
               <h5>Title : {book.volumeInfo.title}</h5>
-              <p>Written By : {book.volumeInfo.authors.join(" , ")}</p>
+              <p>{book.volumeInfo.authors ? `Written By : ${book.volumeInfo.authors.join(" , ")}` : `Written By : Not available` }</p>
               <div className="row">
-                  <div className="col-md-2">
-                      <img src={book.volumeInfo.imageLinks.thumbnail} alt=""/>
-                  </div>
+                    <div className="col-md-2">
+                      {book.volumeInfo.imageLinks ? <img src={book.volumeInfo.imageLinks.thumbnail} alt="Book image"/> : <img style={{width:"128px", height:"200px"}} src="https://media1.giphy.com/media/26xBIygOcC3bAWg3S/giphy.gif?cid=3640f6095c5c6b47532f63642e308d9c" alt="Book image"/>}
+                    </div>
                   <div className="col-md-10">
                       <p>{book.volumeInfo.description}</p>
                   </div>
