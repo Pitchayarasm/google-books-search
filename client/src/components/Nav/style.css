@@ -1,0 +1,29 @@
+* {
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+.navbar {
+    background: #4aaaa5;
+    position: fixed;
+    width: 100%;
+    min-height: 30px;
+    display: block;
+    font-size: 30px;
+    box-shadow: 0 14px 28px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.22);
+    z-index: 999;
+}
+
+a {
+    color: white !important;
+    text-align: right !important;
+}
+
+a:hover {
+  text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
+}
+
+.nav.google {
+    padding-left: 35px;
+    color: white !important;
+}
+

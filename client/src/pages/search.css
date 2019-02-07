@@ -1,0 +1,12 @@
+.container {
+    border: solid 2px lightgrey;
+    margin-top: 30px;
+    padding: 30px;
+}
+
+.container.result {
+    border: solid 2px lightgrey;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 30px; 
+}
